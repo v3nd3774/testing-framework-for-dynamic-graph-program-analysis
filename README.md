@@ -49,10 +49,20 @@ The method that is being tested will be run in a separate thread, so that we can
 
 ### Generating additional test cases
 
-The plugin will enable new test case generation from the user input. The supported graph perturbation methods are listed in the table below:
+The plugin will enable new test case generation from the user input. 
+
+Assuming a graph similar to Figure 1 the supported graph perturbation methods are in the table below:
 
 |perturbation methods|description|figure depiction|
 |---|---|---|
-|How many investors are in the graph| 1|
-|How many `BUY LIMIT ORDER` orders are in the graph|1|
-|How many stocks have had their price updated during the program's running|Since we don't have another graph to compare to we don't know, if this is the first measurement then it would be 1 given an empty graph or 0 if this is how the graph started.|
+|DEFAULT|This method uses exactly the same graph that was input from the user| 1|
+|DUPLICATE|This method uses the same graph and adds `Copy` to the identifying attribute to duplicate the graph| 2|
+|HETEROGENOUS|This method modifies the `Type` attribute used on the nodes in the graph to make the graph contain different node types than what the user specified.|3|
+
+![Figure 2: Duplicate graph depiction](images/example-graph-3.png)
+
+> Figure 2: Duplicate graph depiction
+
+![Figure 3: Heterogenous graph depiction](images/example-graph-4.png)
+
+> Figure 3: Heterogenous graph depiction
