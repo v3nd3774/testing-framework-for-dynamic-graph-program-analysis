@@ -1,60 +1,58 @@
-A repository to store work for our testing framework for dynamic graph program analysis.
+# Project Scope
 
-# Testing framework for dynamic graph program analysis
-​
+### High Level
+We are creating a re-usable plugin for testing software that manipulates Neo4J graphs.
 
-Team 9
+The plugin will be published on the internet for others to use.
 
-Josue Caraballo​, Dinesh Madurantakam​, Yu Zhao
+The plugin will accept graph test cases specified by the user as [dot language](https://dreampuf.github.io/GraphvizOnline/#digraph%20G%20%7B%0A%20%20Investor_Name_Dinesh%5B%5D%3B%0A%20%20Stock_Symbol_AAPL%5B%5D%3B%0A%20%20Investor_Name_Dinesh%20-%3E%20Stock_Symbol_AAPL%3B%0A%7D).
 
-About the program
+For example, given the following [graph](https://dreampuf.github.io/GraphvizOnline/#digraph%20G%20%7B%0A%20%20Investor_Name_Dinesh%5B%5D%3B%0A%20%20Stock_Symbol_AAPL%5B%5D%3B%0A%20%20Investor_Name_Dinesh%20-%3E%20Stock_Symbol_AAPL%20%5B%20label%3D%22TYPE%3DBUYLIMITORDER%22%20%5D%3B%0A%7D):
 
-Programs that operate on graph database data require reliable methods that establish the connection to, read, write and process data.​
-Dynamic testing of these programs includes simulation of a graph database in various states to ensure code that is tested is robust to handle various edge cases such as empty graphs, graphs with heterogeneous data, etc.​
-Additionally, target query metrics can be specified to validate program adherence to graph behavior specifications with the results being visualized.​
-Why dynamically test graph programs?​
+![Figure 1: Example graph 1](images/example-graph-2.png)
 
-Programs that are relied on to populate or manipulate graphs in specific ways need to perform expectedly and not fail due to a lack of proper edge case handling.​
-Although static program analysis can identify certain problems in algorithm implementation, dynamic analysis can identify different problems given a set of constraints that are expected to be met during program execution.
-Why create a testing framework?
+The plugin will understand that we need 2 nodes where one is an `Investor` type and the `Name=Dinesh` &amp; a `Stock` node with `Symbol=AAPL` as well as an edge with the type as `BUYLIMITORDER` going between the two nodes.
 
-Companies use software development frameworks to reduce boilerplate and increase developer efficiency, extending these existing frameworks to provide additional testing functionality allows us to benefit those who want to add our framework to their project.​
-Contributing to the plugin can also serve as a reference for other developers in the future for examples relating to graph test-case generation, graph database instrumentation, and metric collection can be implemented.​
-Project Domain​
+The plugin will connect to an existing Neo4J database instance and manipulate the graph into the format described by the user.
 
-For testing, we will simulate graph programs a fintech startup may be interested in.​
+The plugin will generating the necessary [cypher query statements](https://neo4j.com/developer/cypher/updating/) to transfer the input graphs onto the database.
 
-Program to populate graph with stock data.​
-Program to populate graph with simulated investors.​
-Program to execute market & buy limit orders on a graph.​
-Program to update graph stock price data.
+### Metrics
 
+The plugin will track whatever metrics the user is interested in during the test. We provide implementations for the following simple metrics:
 
-Programming Language​ & Testing framework​
+  - Counts of a specific type of node (ie. how many investors are in the graph)
+  - Counts of a specific type of edge (ie. how many `BUY LIMIT ORDER` orders are in the graph)
+  - How many nodes have changes in the graph since the last time we checked? (ie. how many stocks have had their price updated during the program's running)
 
-The language we are all familiar with is Java, so we will use that.​
-We will use the maven software development framework to build & test our software.​
-We will extend the JUnit testing framework with this software to enable dynamic graph testing.​
-Functions we need to create
+For example, consider the following graph:
 
-Turn graph on and off
-Register queries as metrics and tracks them over test execution – we can use a config file to specify these so our framework loads them in at runtime
-'Metric queries' should have the metric values plotted and attached to the test HTML report.
-The graph should be visualized at different stages during the testing process and these images should be added to the test HTML report.
-Be able to run the program independently of the test with whatever parameters the program needs to run. Needs to be resistant to program failure (test should indicate that the program under test failed instead of crashing).
-Different roles in the system
+![Figure 2: Example graph here showing one investor and one stock with 2 order edges between the nodes.](images/example-graph-1.png)
 
-For stocks:
-We need the stock symbol, the time the price was last measured, and the price. These sources claim to offer free API keys that are rate-limited. If we operate within the rates we can use these as free data sources for stock data. Or parsing historical data from some other source.
+> Figure 2: Example graph here showing one investor and one stock with two order edges between the nodes.
 
-https://polygon.io/docs/getting-started
+If we were to measure the above metrics on the graph we would see:
 
-https://www.alphavantage.co/documentation/
+|metric|value on example graph|
+|---|---|
+|How many investors are in the graph| 1|
+|How many `BUY LIMIT ORDER` orders are in the graph|1|
+|How many stocks have had their price updated during the program's running|Since we don't have another graph to compare to we don't know, if this is the first measurement then it would be 1 given an empty graph or 0 if this is how the graph started.|
 
-https://marketstack.com/
+The plugin will measure the metrics at the rate specified by the user in milliseconds. The user will expect the values to either go up or down over the course of the test and the test will fail or pass depending on if graph behaves in the way the user expects.
 
-For market or buy limit orders:
-We need the order DateTime, fulfillment DateTime (if fulfilled), target share price, number of shares, and order status. These items can be generated.
+### Test execution time
 
-For investors:
-We need their name and the uninvested balance of their account.
+Tests can be configured to be run for a specified length of time to test long-running programs, or for the duration of a program's execution for programs that do not run indefinitely.
+
+The method that is being tested will be run in a separate thread, so that we can continue to measure the metrics at the appripriate time in the main thread.
+
+### Generating additional test cases
+
+The plugin will enable new test case generation from the user input. The supported graph perturbation methods are listed in the table below:
+
+|perturbation methods|description|figure depiction|
+|---|---|---|
+|How many investors are in the graph| 1|
+|How many `BUY LIMIT ORDER` orders are in the graph|1|
+|How many stocks have had their price updated during the program's running|Since we don't have another graph to compare to we don't know, if this is the first measurement then it would be 1 given an empty graph or 0 if this is how the graph started.|
