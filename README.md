@@ -66,3 +66,7 @@ Assuming a graph similar to Figure 1 the supported graph perturbation methods ar
 ![Figure 3: Heterogenous graph depiction](images/example-graph-4.png)
 
 > Figure 3: Heterogenous graph depiction
+
+### Organization
+
+The plugin code is stored in the `plugin` folder.
