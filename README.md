@@ -51,6 +51,8 @@ The method that is being tested will be run in a separate thread, so that we can
 
 The plugin will enable new test case generation from the user input. 
 
+These are intended to catch edge cases that programs do not account for, such as checking price for a stock whose price is unavailible.
+
 Assuming a graph similar to Figure 1 the supported graph perturbation methods are in the table below:
 
 |perturbation methods|description|figure depiction|
