@@ -1,3 +1,5 @@
+[![Build Status](https://app.travis-ci.com/v3nd3774/testing-framework-for-dynamic-graph-program-analysis.svg?branch=main)](https://app.travis-ci.com/v3nd3774/testing-framework-for-dynamic-graph-program-analysis)
+
 # Project Scope
 
 ### High Level
