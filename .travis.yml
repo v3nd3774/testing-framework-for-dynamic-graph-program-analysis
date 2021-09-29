@@ -1,0 +1,8 @@
+language: java
+jdk: openjdk10
+before_install:
+  - cd plugin
+install:
+  - mvn dependency:resolve
+script:
+  - mvn test
