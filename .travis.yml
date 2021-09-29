@@ -1,5 +1,5 @@
 language: java
-jdk: openjdk10
+jdk: openjdk15
 before_install:
   - cd plugin
 install:
