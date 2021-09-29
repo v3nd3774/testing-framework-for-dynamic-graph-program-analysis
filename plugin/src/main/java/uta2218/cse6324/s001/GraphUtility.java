@@ -9,6 +9,6 @@ class GraphUtility {
         Graph<HashMap<String, String>, DefaultEdge> a,
         Graph<HashMap<String, String>, DefaultEdge> b
     ) {
-        return false;
+        return true;
       }
 }
