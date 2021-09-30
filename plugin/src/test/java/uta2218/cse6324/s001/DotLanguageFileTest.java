@@ -72,14 +72,14 @@ public class DotLanguageFileTest extends TestCase {
    }
 
    // test we can successfully read in dotfile content
-   public void testRead(){
+   public void testRead() throws Exception {
      String expectedEmpty = "digraph G {\n}\n";
      DotLanguageFile file = new DotLanguageFile(emptyPath);
      assertEquals(expectedEmpty, file.read());
    }
 
    // test can read a graph with one node
-   public void testSimpleNonempty(){
+   public void testSimpleNonempty() throws Exception {
       DotLanguageFile fileA = new DotLanguageFile(oneInvestor);
       DotLanguageFile fileB = new DotLanguageFile(oneStock);
       assertTrue(GraphUtility.equals(
@@ -93,7 +93,7 @@ public class DotLanguageFileTest extends TestCase {
    }
 
    // test can read a graph with one node
-   public void testComplexNonempty(){
+   public void testComplexNonempty() throws Exception {
       DotLanguageFile fileA = new DotLanguageFile(onePurchase);
       DotLanguageFile fileB = new DotLanguageFile(varietyOfOrders);
       assertTrue(GraphUtility.equals(
