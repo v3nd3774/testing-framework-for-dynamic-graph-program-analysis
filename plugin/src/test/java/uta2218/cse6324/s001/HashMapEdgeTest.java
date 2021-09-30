@@ -11,12 +11,10 @@ public class HashMapEdgeTest extends TestCase {
 
    // assigning the values
    protected void setUp(){
-      HashMap<String, String> a = new HashMap<String, String>();
-      HashMap<String, String> b = new HashMap<String, String>();
-      HashMap<String, String> c = new HashMap<String, String>();
+      a = new HashMap<String, String>();
+      b = new HashMap<String, String>();
       a.put("KEYA", "VALUEA");
       b.put("KEYB", "VALUEB");
-      c.put("KEYC", "VALUEC");
    }
 
    public void testInstantiate() {
@@ -26,12 +24,12 @@ public class HashMapEdgeTest extends TestCase {
 
    public void testGetter(){
      HashMapEdge edge = new HashMapEdge(a);
-     assertTrue(edge.getLabel().equals(a));
+     assertTrue(a.equals(edge.getLabel()));
    }
 
    public void testUpdate(){
      HashMapEdge edge = new HashMapEdge(a);
      edge.setLabel(b);
-     assertTrue(edge.getLabel().equals(b));
+     assertTrue(b.equals(edge.getLabel()));
    }
 }

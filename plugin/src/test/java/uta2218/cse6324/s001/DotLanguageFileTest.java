@@ -14,6 +14,7 @@ public class DotLanguageFileTest extends TestCase {
    protected Graph<HashMap<String, String>, HashMapEdge> graphC;
    protected Graph<HashMap<String, String>, HashMapEdge> graphD;
 
+   private File emptyPath;
    private File oneInvestor;
    private File onePurchase;
    private File oneStock;
@@ -23,6 +24,8 @@ public class DotLanguageFileTest extends TestCase {
    protected void setUp(){
       emptyGraphExpected = DotLanguageFile.createEmptyGraph();
       testResourcePath = new File("src/test/resources");
+      // Setup empty graph file
+      emptyPath = new File(testResourcePath.getPath() + "/empty-graph.dot");
 
       // Setup investor graph for testing
       graphA = DotLanguageFile.createEmptyGraph();
@@ -41,6 +44,7 @@ public class DotLanguageFileTest extends TestCase {
       oneStock = new File(testResourcePath.getPath() + "/one-stock.dot");
 
       // setup single purchase graph
+      graphC = DotLanguageFile.createEmptyGraph();
       HashMap<String, String> edgeA1A2_1 = new HashMap<String, String>();
       edgeA1A2_1.put("TYPE", "BUYLIMITORDER");
       graphC.addVertex(nodeA1);
@@ -49,6 +53,7 @@ public class DotLanguageFileTest extends TestCase {
       onePurchase = new File(testResourcePath.getPath() + "/one-purchase.dot");
 
       // setup two purchase graph
+      graphD = DotLanguageFile.createEmptyGraph();
       HashMap<String, String> edgeA1A2_2 = new HashMap<String, String>();
       edgeA1A2_1.put("TYPE", "MARKETLIMITORDER");
       graphD.addVertex(nodeA1);
@@ -68,11 +73,9 @@ public class DotLanguageFileTest extends TestCase {
 
    // test we can successfully read in dotfile content
    public void testRead(){
-     String expectedEmpty = "digraph G {\n}";
-     DotLanguageFile file = new DotLanguageFile(
-         testResourcePath
-     );
-     assertEquals(file.read(), expectedEmpty);
+     String expectedEmpty = "digraph G {\n}\n";
+     DotLanguageFile file = new DotLanguageFile(emptyPath);
+     assertEquals(expectedEmpty, file.read());
    }
 
    // test can read a graph with one node
