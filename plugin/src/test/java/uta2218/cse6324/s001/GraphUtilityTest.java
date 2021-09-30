@@ -1,18 +1,14 @@
 package uta2218.cse6324.s001;
 
 import junit.framework.TestCase;
-import static org.junit.Assert.assertEquals;
 import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.SimpleGraph;
 import java.util.HashMap;
-import java.util.Set;
 
 public class GraphUtilityTest extends TestCase {
-   protected Graph<HashMap<String, String>, DefaultEdge> emptyGraphA;
-   protected Graph<HashMap<String, String>, DefaultEdge> emptyGraphB;
-   protected Graph<HashMap<String, String>, DefaultEdge> graphC;
-   protected Graph<HashMap<String, String>, DefaultEdge> graphD;
+   protected Graph<HashMap<String, String>, HashMapEdge> emptyGraphA;
+   protected Graph<HashMap<String, String>, HashMapEdge> emptyGraphB;
+   protected Graph<HashMap<String, String>, HashMapEdge> graphC;
+   protected Graph<HashMap<String, String>, HashMapEdge> graphD;
 
    // assigning the values
    protected void setUp(){

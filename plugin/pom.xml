@@ -24,6 +24,11 @@
       <version>1.5.1</version>
     </dependency>
     <dependency>
+      <groupId>org.jgrapht</groupId>
+      <artifactId>jgrapht-demo</artifactId>
+      <version>1.5.1</version>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.11</version>
