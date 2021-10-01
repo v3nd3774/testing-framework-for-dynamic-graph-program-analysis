@@ -2,7 +2,12 @@ package uta2218.cse6324.s001;
 
 import junit.framework.TestCase;
 import org.jgrapht.Graph;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Set;
 import java.io.File;
 
@@ -76,6 +81,45 @@ public class DotLanguageFileTest extends TestCase {
      String expectedEmpty = "digraph G {\n}\n";
      DotLanguageFile file = new DotLanguageFile(emptyPath);
      assertEquals(expectedEmpty, file.read());
+   }
+   public void testSplitAttributesOff() throws Exception {
+     String in = "Investor_Name_Dinesh -> Stock_Symbol_AAPL [ label=\"TYPE=BUYLIMITORDER\" ];";
+     String[] expected = new String[]{"Investor_Name_Dinesh -> Stock_Symbol_AAPL ", " label=\"TYPE=BUYLIMITORDER\" ];"};
+     String[] actual = DotLanguageFile.splitAttributesOff(in);
+     List<String> expectedD = new ArrayList<String>();
+     List<String> actualL = new ArrayList<String>();
+     Collections.addAll(expectedD, expected);
+     Collections.addAll(actualL, actual);
+     
+     IntStream.range(0, expectedD.size())
+       .forEach(idx -> {assertTrue(expectedD.get(idx).equals(actualL.get(idx)));});
+   }
+   public void testNodeParser() throws Exception {
+     String in = "Investor_Name_Dinesh";
+     HashMap<String, String> expected = new HashMap<String, String>();
+     expected.put("TYPE", "Investor");
+     expected.put("Name", "Dinesh");
+     HashMap<String, String> actual = DotLanguageFile.nodeTextToHashMap(in);
+     for (java.util.Map.Entry<String, String> kv : actual.entrySet()) {
+       String k = kv.getKey();
+       String v = kv.getValue();
+       System.out.println("ACTUAL KEY = " + k);
+       System.out.println("ACTUAL VAL = " + v);
+     }
+     assertTrue(expected.equals(actual));
+   }
+   public void testAttributeParser() throws Exception {
+     String in = " label=\"TYPE=BUYLIMITORDER\" ];";
+     HashMap<String, String> expected = new HashMap<String, String>();
+     expected.put("TYPE", "BUYLIMITORDER");
+     HashMap<String, String> actual = DotLanguageFile.parseAttributes(in);
+     for (java.util.Map.Entry<String, String> kv : actual.entrySet()) {
+       String k = kv.getKey();
+       String v = kv.getValue();
+       System.out.println("ACTUAL KEY = " + k);
+       System.out.println("ACTUAL VAL = " + v);
+     }
+     assertTrue(expected.equals(actual));
    }
 
    // test can read a graph with one node
