@@ -15,4 +15,13 @@ class HashMapEdge extends DefaultEdge {
   public void setLabel(HashMap<String, String> label) {
     this.label = label;
   }
+  @Override
+  public boolean equals(Object obj) {
+    HashMapEdge edge = (HashMapEdge)obj;
+    return this.label.equals(edge.getLabel());
+  }
+  @Override
+  public int hashCode() {
+    return this.label.hashCode();
+  }
 }

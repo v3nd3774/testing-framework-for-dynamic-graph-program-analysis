@@ -22,6 +22,12 @@ public class HashMapEdgeTest extends TestCase {
      assertTrue(edge instanceof HashMapEdge);
    }
 
+   public void testEquality() {
+     HashMapEdge c = new HashMapEdge(a);
+     HashMapEdge d = new HashMapEdge(a);
+     assertTrue(c.equals(d));
+   }
+
    public void testGetter(){
      HashMapEdge edge = new HashMapEdge(a);
      assertTrue(a.equals(edge.getLabel()));

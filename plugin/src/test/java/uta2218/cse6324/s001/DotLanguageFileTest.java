@@ -2,6 +2,8 @@ package uta2218.cse6324.s001;
 
 import junit.framework.TestCase;
 import org.jgrapht.Graph;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.HashMap;
@@ -18,6 +20,7 @@ public class DotLanguageFileTest extends TestCase {
    protected Graph<HashMap<String, String>, HashMapEdge> graphB;
    protected Graph<HashMap<String, String>, HashMapEdge> graphC;
    protected Graph<HashMap<String, String>, HashMapEdge> graphD;
+   private Lock sequential = new ReentrantLock();
 
    private File emptyPath;
    private File oneInvestor;
@@ -25,8 +28,10 @@ public class DotLanguageFileTest extends TestCase {
    private File oneStock;
    private File varietyOfOrders;
 
+
    // assigning the values
    protected void setUp(){
+      sequential.lock();
       emptyGraphExpected = DotLanguageFile.createEmptyGraph();
       testResourcePath = new File("src/test/resources");
       // Setup empty graph file
@@ -52,20 +57,27 @@ public class DotLanguageFileTest extends TestCase {
       graphC = DotLanguageFile.createEmptyGraph();
       HashMap<String, String> edgeA1A2_1 = new HashMap<String, String>();
       edgeA1A2_1.put("TYPE", "BUYLIMITORDER");
+      HashMapEdge edgeA1A2_1H = new HashMapEdge(edgeA1A2_1);
       graphC.addVertex(nodeA1);
       graphC.addVertex(nodeA2);
-      graphC.addVertex(edgeA1A2_1);
+      graphC.addEdge(nodeA1, nodeA2, edgeA1A2_1H);
       onePurchase = new File(testResourcePath.getPath() + "/one-purchase.dot");
 
       // setup two purchase graph
       graphD = DotLanguageFile.createEmptyGraph();
       HashMap<String, String> edgeA1A2_2 = new HashMap<String, String>();
-      edgeA1A2_1.put("TYPE", "MARKETLIMITORDER");
+      edgeA1A2_2.put("TYPE", "MARKETLIMITORDER");
+      HashMapEdge edgeA1A2_2H = new HashMapEdge(edgeA1A2_2);
       graphD.addVertex(nodeA1);
       graphD.addVertex(nodeA2);
-      graphD.addVertex(edgeA1A2_1);
-      graphD.addVertex(edgeA1A2_2);
+      graphD.addEdge(nodeA1, nodeA2, edgeA1A2_1H);
+      graphD.addEdge(nodeA1, nodeA2, edgeA1A2_2H);
       varietyOfOrders = new File(testResourcePath.getPath() + "/variety-of-orders.dot");
+   }
+
+   protected void tearDown() throws Exception {
+       sequential.unlock();
+       super.tearDown();
    }
 
    // test empty graph is actually empty
@@ -121,6 +133,12 @@ public class DotLanguageFileTest extends TestCase {
      }
      assertTrue(expected.equals(actual));
    }
+   public void testAttributeParserEmpty() throws Exception {
+     String in = "];";
+     HashMap<String, String> expected = new HashMap<String, String>();
+     HashMap<String, String> actual = DotLanguageFile.parseAttributes(in);
+     assertTrue(expected.equals(actual));
+   }
 
    // test can read a graph with one node
    public void testSimpleNonempty() throws Exception {
@@ -136,17 +154,23 @@ public class DotLanguageFileTest extends TestCase {
       ));
    }
 
-   // test can read a graph with one node
-   public void testComplexNonempty() throws Exception {
-      DotLanguageFile fileA = new DotLanguageFile(onePurchase);
-      DotLanguageFile fileB = new DotLanguageFile(varietyOfOrders);
+   // test can read a graph with one purchase
+   public void testSinglePurchase() throws Exception {
+      System.out.println("TESTIN SINGLE PURCHASE");
+      DotLanguageFile fileC = new DotLanguageFile(onePurchase);
       assertTrue(GraphUtility.equals(
             graphC,
-            fileA.parse()
+            fileC.parse()
       ));
+   }
+
+   // test can read a graph with two purchase
+   public void testTwoPurchase() throws Exception {
+      System.out.println("TESTIN COMPLEX PURCHASE");
+      DotLanguageFile fileD = new DotLanguageFile(varietyOfOrders);
       assertTrue(GraphUtility.equals(
             graphD,
-            fileB.parse()
+            fileD.parse()
       ));
    }
 }

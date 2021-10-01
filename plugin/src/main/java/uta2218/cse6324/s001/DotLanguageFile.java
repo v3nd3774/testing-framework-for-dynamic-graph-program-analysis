@@ -2,6 +2,7 @@ package uta2218.cse6324.s001;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.SimpleGraph;
+import org.apache.commons.lang3.StringUtils;
 import java.util.stream.IntStream;
 import java.io.File;
 import java.util.Collections;
@@ -32,18 +33,23 @@ public class DotLanguageFile {
     protected static HashMap<String, String> parseAttributes(String in) {
       HashMap<String, String> out = new HashMap<String, String>();
       String trimmed = in.trim();
-      String right = trimmed.split("\"")[1];
-      String left = right.split("\"")[0];
-      String[] attributes = left.split(",");
-      List<String> attrTextPairs = new ArrayList<String>();
-      Collections.addAll(attrTextPairs, attributes);
-      for(String textPair : attrTextPairs) {
-        String[] kvArray = textPair.split("=");
-        String k = kvArray[0];
-        String v = kvArray[1];
-        out.put(k, v);
+      String [] split = trimmed.split("\"");
+      if (split.length < 2) {
+        return out;
+      } else {
+        String right = split[1];
+        String left = right.split("\"")[0];
+        String[] attributes = left.split(",");
+        List<String> attrTextPairs = new ArrayList<String>();
+        Collections.addAll(attrTextPairs, attributes);
+        for(String textPair : attrTextPairs) {
+          String[] kvArray = textPair.split("=");
+          String k = kvArray[0];
+          String v = kvArray[1];
+          out.put(k, v);
+        }
+        return out;
       }
-      return out;
     }
     protected static HashMap<String, String> nodeTextToHashMap(String text) throws Exception {
           HashMap<String, String> nodeData = new HashMap<String, String>();
@@ -76,28 +82,63 @@ public class DotLanguageFile {
           System.out.println("IDENTIFIED EDGE LINE: " + trimmed);
           String[] split = DotLanguageFile.splitAttributesOff(trimmed);
           String edge_elements = split[0];
+          System.out.println("EDGE ELEMENTS: " + edge_elements);
           String edge_attributes = split[1];
+          System.out.println("EDGE ATTRS: " + edge_attributes);
 
 
           String[] nodes = edge_elements.split("->");
           String sourceNodeStr = nodes[0].trim();
+          System.out.println("source nodestr = " + sourceNodeStr);
           String targetNodeStr = nodes[1].trim();
+          System.out.println("target nodestr = " + targetNodeStr);
 
           HashMap<String, String> sourceNodeData = DotLanguageFile.nodeTextToHashMap(sourceNodeStr);
+          System.out.println("SOURCENODEDATA");
+          for (java.util.Map.Entry<String, String> kv : sourceNodeData.entrySet()) {
+            String k = kv.getKey();
+            String v = kv.getValue();
+            System.out.println("ACTUAL KEY = " + k);
+            System.out.println("ACTUAL VAL = " + v);
+          }
+          System.out.println("TARGETNODEDATA");
           HashMap<String, String> targetNodeData = DotLanguageFile.nodeTextToHashMap(targetNodeStr);
+          for (java.util.Map.Entry<String, String> kv : targetNodeData.entrySet()) {
+            String k = kv.getKey();
+            String v = kv.getValue();
+            System.out.println("ACTUAL KEY = " + k);
+            System.out.println("ACTUAL VAL = " + v);
+          }
+          System.out.println("EDGEDATA");
           HashMap<String, String> edgeAttributes = DotLanguageFile.parseAttributes(edge_attributes);
           HashMapEdge edge = new HashMapEdge(edgeAttributes);
-          out.addEdge(sourceNodeData, targetNodeData, edge);
-        } else if (line.contains("];")){
+          for (java.util.Map.Entry<String, String> kv : edge.getLabel().entrySet()) {
+            String k = kv.getKey();
+            String v = kv.getValue();
+            System.out.println("ACTUAL KEY = " + k);
+            System.out.println("ACTUAL VAL = " + v);
+          }
+          if ((!sourceNodeData.entrySet().isEmpty()) &&
+              (!targetNodeData.entrySet().isEmpty()) &&
+              (!edge.getLabel().entrySet().isEmpty())) {
+            out.addEdge(sourceNodeData, targetNodeData, edge);
+          }
+          continue;
+        } else if (StringUtils.countMatches(trimmed, "_") == 2) {
           // NODE DESCRIPTION LINE
           System.out.println("IDENTIFIED NODE LINE: " + trimmed);
           String[] split = DotLanguageFile.splitAttributesOff(trimmed);
           String node_elements = split[0];
+          System.out.println("NODE ELEMENTS: " + node_elements);
           String node_attributes = split[1];
+          System.out.println("NODE attributes: " + node_attributes);
           HashMap<String, String> nodeData = DotLanguageFile.nodeTextToHashMap(node_elements);
           HashMap<String, String> nodeAttributes = DotLanguageFile.parseAttributes(node_attributes);
           nodeData.putAll(nodeAttributes);
-          out.addVertex(nodeData);
+          if (!nodeData.entrySet().isEmpty()) {
+            out.addVertex(nodeData);
+          }
+          continue;
         } else {
           throw new Exception("UNKNOWN LINE TYPE ENCOUNTERED: " + trimmed);
         }
