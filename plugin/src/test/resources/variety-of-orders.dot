@@ -1,0 +1,6 @@
+digraph G {
+  Investor_Name_Dinesh[];
+  Stock_Symbol_AAPL[];
+  Investor_Name_Dinesh -> Stock_Symbol_AAPL [ label="TYPE=BUYLIMITORDER" ];
+  Investor_Name_Dinesh -> Stock_Symbol_AAPL [ label="TYPE=MARKETLIMITORDER" ];
+}
