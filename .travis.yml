@@ -16,7 +16,8 @@ jobs:
         skip_cleanup: true
         script:
           # Use nvm to install and use the Node LTS version (nvm is installed on all Travis images)
-          - nvm install lts/* 
-          - npx semantic-release
+          - bash -c "curl -o ~/.nvm/nvm.sh https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh" # update nvm
+          - bash -c "nvm install lts/*"
+          - bash -c "npx semantic-release"
         on:
           all_branches: true
