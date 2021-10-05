@@ -15,11 +15,12 @@ jobs:
         provider: script
         skip_cleanup: true
         script: >
-          bash -c "echo 'DOWNLOADINg nvm.sh'";
-          bash -c "curl -o ~/.nvm/nvm.sh https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh";
-          bash -c "echo 'DOWNLOADINg lts'";
-          bash -c "source ~/.nvm/nvm.sh && nvm install v16.10.0";
-          bash -c "echo 'RUNNINg semantic-release'";
-          bash -c "npx semantic-release";
+          echo 'DOWNLOADINg nvm.sh';
+          curl -o ~/.nvm/nvm.sh https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh ;
+          echo 'DOWNLOADINg lts';
+          source ~/.nvm/nvm.sh ;
+          nvm install v16.10.0 ;
+          echo 'RUNNINg semantic-release';
+          npx semantic-release ;
         on:
           all_branches: true
