@@ -1,4 +1,4 @@
-package uta2218.cse6324.s001;
+package com.github.v3nd3774.uta2218.cse6324.s001;
 
 import junit.framework.TestCase;
 import org.jgrapht.Graph;
