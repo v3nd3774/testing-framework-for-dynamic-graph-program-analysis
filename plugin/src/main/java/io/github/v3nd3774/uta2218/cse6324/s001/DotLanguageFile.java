@@ -1,4 +1,4 @@
-package com.github.v3nd3774.uta2218.cse6324.s001;
+package io.github.v3nd3774.uta2218.cse6324.s001;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.SimpleGraph;
