@@ -18,8 +18,10 @@ jobs:
         bash -c "echo DOWNLOADINg\ nvm.sh";
         bash -c "curl -o ~/.nvm/nvm.sh https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh";
         bash -c "echo DOWNLOADINg\ lts\ and\ running\ dryrun";
+        ls -alh;
         bash -c "source ~/.nvm/nvm.sh && nvm install v16.10.0 && npm install @semantic-release/exec && npx semantic-release --dry-run --branches $TRAVIS_BRANCH";
-        bash -c "source .VERSION && echo VERSION=$VERSION";
+        ls -alh;
+        bash -c "cat .VERSION && source .VERSION && echo VERSION=$VERSION";
       on:
         all_branches: true
   - if: branch = main
@@ -32,8 +34,10 @@ jobs:
         bash -c "echo DOWNLOADINg\ nvm.sh";
         bash -c "curl -o ~/.nvm/nvm.sh https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh";
         bash -c "echo DOWNLOADINg\ lts\ and\ running\ release";
+        ls -alh;
         bash -c "source ~/.nvm/nvm.sh && nvm install v16.10.0 && npm install @semantic-release/exec && npx semantic-release";
-        bash -c "source .VERSION && mvn versions:set -DnewVersion=\$VERSION && mvn clean deploy";
+        ls -alh;
+        bash -c "cat .VERSION && source .VERSION && mvn versions:set -DnewVersion=\$VERSION && mvn clean deploy";
       on:
         all_branches: true
 env:
