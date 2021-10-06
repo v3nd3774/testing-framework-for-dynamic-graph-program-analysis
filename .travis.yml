@@ -4,6 +4,16 @@ before_install:
 - cd plugin
 install:
 - mvn dependency:resolve
+before_script:
+- echo "DRY RUN"
+- echo "DOWNLOADINg nvm.sh"
+- curl -o ~/.nvm/nvm.sh https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh
+- echo "DOWNLOADINg lts and running dryrun"
+- ls -alh;
+- source ~/.nvm/nvm.sh && nvm install v16.10.0 && npm install @semantic-release/exec 
+- npx semantic-release --dry-run --branches $TRAVIS_BRANCH"
+- ls -alh
+- source .VERSION
 script:
 - mvn test
 jobs:
@@ -13,15 +23,6 @@ jobs:
     deploy:
       provider: script
       skip_cleanup: true
-      before_script: >
-        bash -c "echo DRY\ RUN";
-        bash -c "echo DOWNLOADINg\ nvm.sh";
-        bash -c "curl -o ~/.nvm/nvm.sh https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh";
-        bash -c "echo DOWNLOADINg\ lts\ and\ running\ dryrun";
-        ls -alh;
-        bash -c "source ~/.nvm/nvm.sh && nvm install v16.10.0 && npm install @semantic-release/exec && npx semantic-release --dry-run --branches $TRAVIS_BRANCH";
-        ls -alh;
-        . .VERSION;
       script: >
         echo VERSION=$VERSION;
       on:
@@ -31,14 +32,6 @@ jobs:
     deploy:
       provider: script
       skip_cleanup: true
-      before_script: >
-        bash -c "echo RELEASEABLE\ RUN";
-        bash -c "echo DOWNLOADINg\ nvm.sh";
-        bash -c "curl -o ~/.nvm/nvm.sh https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh";
-        bash -c "echo DOWNLOADINg\ lts\ and\ running\ release";
-        bash -c "source ~/.nvm/nvm.sh && nvm install v16.10.0 && npm install @semantic-release/exec && npx semantic-release --dry-run";
-        ls -alh;
-        . .VERSION;
       script: >
         echo VERSION=$VERSION;
         bash -c "source ~/.nvm/nvm.sh && nvm install v16.10.0 && npm install @semantic-release/exec && npx semantic-release";
