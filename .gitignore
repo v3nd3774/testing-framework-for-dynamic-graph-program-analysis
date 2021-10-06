@@ -67,4 +67,5 @@ gradle-app.setting
 *.project*
 *.settings*
 *package.json*
+*VERSION*
 *package-lock*
