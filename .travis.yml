@@ -11,7 +11,7 @@ before_script:
 - echo "DOWNLOADINg lts and running dryrun"
 - ls -alh;
 - source ~/.nvm/nvm.sh && nvm install v16.10.0 && npm install @semantic-release/exec 
-- npx semantic-release --dry-run --branches $TRAVIS_BRANCH"
+- npx semantic-release --dry-run --branches $TRAVIS_BRANCH
 - ls -alh
 - source .VERSION
 script:
