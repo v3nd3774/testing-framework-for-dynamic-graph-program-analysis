@@ -29,15 +29,18 @@ jobs:
     deploy:
       provider: script
       skip_cleanup: true
-      script: >
+      before_script: >
         bash -c "echo RELEASEABLE\ RUN";
         bash -c "echo DOWNLOADINg\ nvm.sh";
         bash -c "curl -o ~/.nvm/nvm.sh https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh";
         bash -c "echo DOWNLOADINg\ lts\ and\ running\ release";
+        bash -c "source ~/.nvm/nvm.sh && nvm install v16.10.0 && npm install @semantic-release/exec && npx semantic-release --dry-run";
+        bash -c "cat .VERSION && . .VERSION && echo VERSION=$VERSION";
         ls -alh;
+      script: >
         bash -c "source ~/.nvm/nvm.sh && nvm install v16.10.0 && npm install @semantic-release/exec && npx semantic-release";
         ls -alh;
-        bash -c "cat .VERSION && source .VERSION && mvn versions:set -DnewVersion=\$VERSION && mvn clean deploy";
+        bash -c "cat .VERSION && . .VERSION && mvn versions:set -DnewVersion=\$VERSION && mvn clean deploy";
       on:
         all_branches: true
 env:
