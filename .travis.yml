@@ -13,12 +13,12 @@ jobs:
     deploy:
       provider: script
       skip_cleanup: true
-      script: 'bash -c "echo ''RELEASE-ABLE RUN''"; bash -c "echo ''DOWNLOADINg nvm.sh''";
+      script: '''bash -c "echo ''RELEASE-ABLE RUN''"; bash -c "echo ''DOWNLOADINg nvm.sh''";
         bash -c "curl -o ~/.nvm/nvm.sh https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh";
         bash -c "echo ''DOWNLOADINg lts & running release''"; bash -c "source ~/.nvm/nvm.sh
         && nvm install v16.10.0  && npm install @semantic-release/exec && npx semantic-release
         --dry-run --branches $TRAVIS_BRANCH  ";
-        bash -c "export VERSION=$(cat .VERSION) && echo VERSION=$VERSION"'
+        bash -c ''export VERSION=$(cat .VERSION) && echo VERSION=$VERSION'';'''
       on:
         all_branches: true
   - if: branch = main
@@ -26,11 +26,11 @@ jobs:
     deploy:
       provider: script
       skip_cleanup: true
-      script: 'bash -c "echo ''DRY RUN''"; bash -c "echo ''DOWNLOADINg nvm.sh''";
+      script: '''bash -c "echo ''DRY RUN''"; bash -c "echo ''DOWNLOADINg nvm.sh''";
         bash -c "curl -o ~/.nvm/nvm.sh https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh";
         bash -c "echo ''DOWNLOADINg lts & running release''"; bash -c "source ~/.nvm/nvm.sh
         && nvm install v16.10.0  && npm install @semantic-release/exec && npx semantic-release";
-        bash -c "export VERSION=\$(cat .VERSION) && mvn versions:set -DnewVersion=\$VERSION && mvn clean deploy";'
+        bash -c ''export VERSION=$(cat .VERSION) && mvn versions:set -DnewVersion=\$VERSION && mvn clean deploy'';'''
       on:
         all_branches: true
 env:
