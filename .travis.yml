@@ -13,7 +13,7 @@ jobs:
     deploy:
       provider: script
       skip_cleanup: true
-      script: '''bash -c "echo ''RELEASE-ABLE RUN''"; bash -c "echo ''DOWNLOADINg nvm.sh''";
+      script: '''bash -c "echo ''RELEASE-ABLE RUN''; bash -c "echo ''DOWNLOADINg nvm.sh''";
         bash -c "curl -o ~/.nvm/nvm.sh https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh";
         bash -c "echo ''DOWNLOADINg lts & running release''"; bash -c "source ~/.nvm/nvm.sh
         && nvm install v16.10.0  && npm install @semantic-release/exec && npx semantic-release
