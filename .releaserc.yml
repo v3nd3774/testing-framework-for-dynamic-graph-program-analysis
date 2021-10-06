@@ -1,0 +1,19 @@
+{
+  "branches": [
+      "v+([0-9])?(.{+([0-9]),x}).x",
+      "main"
+    ],
+  "repositoryUrl": "git@github.com:v3nd3774/testing-framework-for-dynamic-graph-program-analysis.git",
+  "tagFormat": "v${version}",
+  "plugins": [
+    '@semantic-release/commit-analyzer',
+    '@semantic-release/release-notes-generator',
+    '@semantic-release/github',
+    [
+      "@semantic-release/exec",
+      {
+        "verifyReleaseCmd": "echo ${nextRelease.version} > .VERSION"
+      }
+    ]
+  ]
+}

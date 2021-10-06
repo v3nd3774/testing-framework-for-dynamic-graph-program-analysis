@@ -4,12 +4,44 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>uta.2218.cse.6324.001</groupId>
+  <groupId>io.github.v3nd3774.uta2218.cse6324.s001</groupId>
   <artifactId>graph-testing-framework</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>graph-testing-framework</name>
+  <name>${project.groupId}:${project.artifactId}</name>
+  <description>Plugin to enable dynamic testing of programs manipulating Neo4J graphs.</description>
   <url>https://github.com/v3nd3774/testing-framework-for-dynamic-graph-program-analysis</url>
+
+ <developers>
+    <developer>
+      <name>Josue Caraballo</name>
+      <email>josue.caraballo@gmail.com</email>
+      <organizationUrl>https://github.com/v3nd3774</organizationUrl>
+    </developer>
+    <developer>
+      <name>Yu Zhao</name>
+      <email>zhaoyufrank8825@gmail.com</email>
+      <organizationUrl>https://github.com/zhaoyufrank</organizationUrl>
+    </developer>
+    <developer>
+      <name>Dinesh Madurantakam</name>
+      <email>dinesh.madurantakam@mavs.uta.edu</email>
+      <organizationUrl>https://github.com/Dinesh9448</organizationUrl>
+    </developer>
+  </developers>
+
+  <licenses>
+    <license>
+      <name>The Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <scm>
+    <connection>scm:git:git://github.com/v3nd3774/testing-framework-for-dynamic-graph-program-analysis.git</connection>
+    <developerConnection>scm:git:ssh://github.com:v3nd3774/testing-framework-for-dynamic-graph-program-analy.git</developerConnection>
+    <url>http://github.com/v3nd3774/testing-framework-for-dynamic-graph-program-analysis/tree/master</url>
+  </scm>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -39,6 +71,18 @@
   <build>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
+        <!-- sonatype publishing -->
+        <plugin>
+          <groupId>org.sonatype.plugins</groupId>
+          <artifactId>nexus-staging-maven-plugin</artifactId>
+          <version>1.6.7</version>
+          <extensions>true</extensions>
+          <configuration>
+            <serverId>ossrh</serverId>
+            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+          </configuration>
+        </plugin>
         <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
@@ -81,7 +125,57 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
+        <!-- Attach source jars-->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>2.2.1</version>
+          <executions>
+            <execution>
+              <id>attach-sources</id>
+              <goals>
+                <goal>jar-no-fork</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <!-- Attach javadocs jar -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.9.1</version>
+          <executions>
+            <execution>
+              <id>attach-javadocs</id>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <!-- Sign artifacts for uploading to maven central -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <version>1.5</version>
+          <executions>
+            <execution>
+              <id>sign-artifacts</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>sign</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
+
 </project>

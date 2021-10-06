@@ -63,5 +63,9 @@ gradle-app.setting
 *.metals*
 *.bloop*
 *.classpath*
+*node_modules*
 *.project*
 *.settings*
+*package.json*
+*VERSION*
+*package-lock*
