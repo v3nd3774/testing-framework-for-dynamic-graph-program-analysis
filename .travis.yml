@@ -26,8 +26,6 @@ jobs:
       skip_cleanup: true
       script: >-
         echo VERSION=$VERSION;
-        export VERSION=1.0.0;
-        bash -c "mvn versions:set -DnewVersion=$VERSION && mvn clean deploy";
       on:
         all_branches: true
   - if: branch = main
@@ -38,6 +36,8 @@ jobs:
       script: >-
         echo VERSION=$VERSION;
         bash -c "source ~/.nvm/nvm.sh && nvm install v16.10.0 && npm install @semantic-release/exec && npx semantic-release";
+        bash -c "mkdir -p ~/.m2 || echo 'folder exists already...'";
+        bash -c "cp .travis.settings.xml ~/.m2/settings.xml";
         bash -c "mvn versions:set -DnewVersion=$VERSION && mvn clean deploy";
       on:
         all_branches: true
