@@ -26,6 +26,8 @@ jobs:
       skip_cleanup: true
       script: >-
         echo VERSION=$VERSION;
+        export VERSION=1.0.0;
+        bash -c "mvn versions:set -DnewVersion=$VERSION && mvn clean deploy";
       on:
         all_branches: true
   - if: branch = main
