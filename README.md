@@ -78,4 +78,3 @@ The plugin code is stored in the `plugin` folder.
 ### How to release once CI stages?
 
 Guide from [here](https://central.sonatype.org/publish/release/).
-
