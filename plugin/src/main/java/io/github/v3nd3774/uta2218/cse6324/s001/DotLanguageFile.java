@@ -2,7 +2,6 @@ package io.github.v3nd3774.uta2218.cse6324.s001;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.SimpleGraph;
-import org.apache.commons.lang3.StringUtils;
 import java.util.stream.IntStream;
 import java.io.File;
 import java.util.Collections;
@@ -124,7 +123,7 @@ public class DotLanguageFile {
             out.addEdge(sourceNodeData, targetNodeData, edge);
           }
           continue;
-        } else if (StringUtils.countMatches(trimmed, "_") == 2) {
+        } else if (trimmed.chars().filter(ch -> ch =='_').count() == (long) 2) {
           // NODE DESCRIPTION LINE
           System.out.println("IDENTIFIED NODE LINE: " + trimmed);
           String[] split = DotLanguageFile.splitAttributesOff(trimmed);
