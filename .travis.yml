@@ -1,4 +1,4 @@
-if: type = push
+if: (type = push) AND (tag IS blank)
 language: java
 jdk: openjdk15
 before_install:
@@ -42,8 +42,3 @@ jobs:
         bash -c "gpg --import all.gpg && mvn versions:set -DnewVersion=$VERSION-SNAPSHOT && mvn -B -e --settings ../.travis.settings.xml -Darguments='-DskipTests' -DreleaseVersion=$VERSION -DdevelopmentVersion=$VERSION-SNAPSHOT -DconnectionUrl=scm:git:https://github.com/v3nd3774/testing-framework-for-dynamic-graph-program-analysis.git release:clean release:prepare release:perform && mvn versions:set -DnewVersion=$VERSION && mvn deploy"
       on:
         all_branches: true
-env:
-  global:
-  - secure: XGiTZCZa5tYGv+M41SkdAnro3vEyXeSUusVfhk8rodPAL1c625+QgfEYT+l5+M4TxjKHOHfYZb/9agWEUeCdY+k+zSSHod6MmMZgdhZmLtY2Sj2K6eV9TDtBdZa/DEwq/Z17+HQ8ktEiQynTZNW5TYgNPo77fLuNVhN///BPxiX86XH037GsmVbUjopiuWg/TUZpumT3Asm5/46YilYgTyy0+J0IfL1UM3C+irZmNXsF0dVZt9Z5UleDbOlsHYPaC4dmvE6J/SCYf6qkYmiPJqhQUG+RT514l9Ir/ejJ4s7CH65/GIwyTEWJjSfH1qx5tWFudQ+upO/MqbIwrnMkk+LzX9jqi2tqEsMmXuF2QlBVF9Uj+kmVYt78aWlwtARYq2w2tKvul3lzqBodaecvLz/jp/DzQl+0oOvf6CO+7eXyDi1UaZvbf/AzqjBFXM60HsiRppeu+SISzeWi4QrYpkQlnJ7NemivVO+CCI0bLR9XMlDTSTvwggDHBJzR+SViAKQs9QXwVplMdRnJYi9EpMqk78yt0t4yi+D1mJD46TpizEWQyGZIcawjYYJY293yLlifRC9zFU917lsot1QXUnF6DC3pdY89+dpiW9uglDfZxMLD77GU7C75hMKwL/iaKVZ5SN4U+aEWRI7AJ5BC/UA830vc/dF299v4JAuCPHo=
-  - secure: bRD82QN3FtIH+2JCMAoxi52a3Qjj7KBBmShVH++JfddFNe4pKHwTD+IT9dlrw8XKwDkBMp9v0RPAUmbRURPJArlbV9zM52P8QANU8/Z4dtdmSfTUOof3+D7hlJY+k7DXXj96WESDVNud33FyeT8cStL+Rz3ueearDmk83TM1y83O3qNFLbfkK44g+iy9rv6H3H3Sy7ZAOHMRIJySAl6dzNvgx+a45CJdB/gzf4MSofLzBoWbCGTHUnml7f42Wf8JZdehpRz+wKRNqaxZORjJWIBdvt2NbQ2xrGKA/XUZYl9qD5FxVJJJGql1W6jYOdP9XPYMudM/A6Wda0b9OspNwNCIO8tKSchtgPV50Bsfu4xAjnw8jaY0RlgzvHy4xYDNL8X1RvEwohUN4IWKQj9UPR9CgXFTcPRPQ40yN0OViYyQzpTKdtFsns6aVccjRGg8l7VcYnflgLGiZXYjAjKsJtMoYeLQQRFjb+KMd/j7kwZl9DgR+cjoApx1OczO0gePWxMPvbehtdUv93j7cpTKOewuMQuuSeX+KmQgoiNIF+7IDXNKriVl28411MJf9AgSdulaRujCcWRdG99bZDnJ5WGgRhKnwsINSuPRwZcPtmBr3kEODGowbXuiwTc2WVe1XxTjC2eY15Rx1HlWsTtdTPlrUjLLRhg83iGjJ8eZ8uk=
-  - secure: S7d6DDocnCYXi2UwGPuhhedZSfcbhXy/xpY4z2JaCo0H8+ceRPzewKxd1ZA7lQJ2vNbVrDtuVUZgiWZ2C3XTGypz1DdY8XY45EmbZSzXdDlrzjFjqMTHaEq/iI29kQfRV3mUV/Gq/0DfBGKeRwtq+UuMAP+84u6MZDvSTtudUXDwliotSRiKbWK7yKsLBpv52A9wTGqmoMD8re0tlEVckD+lYlHEcHDmx+7p1F4sUYQw0edCgEuwym5e88VAOLL5inxi/yaD/mj4aR5ZH1RkArMdZu8uMQB+GwpaY8Jm9npHYDz0WvcW+BY0NOTxZpkDS44pGnEKKJyvoMJUCeJ9u5FiboS+6e7/5CI26/tflfBf26CC/8xhmuMabKkrbMotWP0VOM7/ED2MKSL4QMg92m1YdcYfK7429Q6gGWTXDAoVDWSYpaxcbawylY4xBfI+jrD+yDxvhV06x3EIx93ErsAY0idLDqLcuGpcloNPE70v69W9MJhzKFMI4THu5c8kPVv6tAeV008Ury0+uaI3Ffjvsqt4QAFL1pRBMZljd+Y6rmaGEditbiU9HiBw5dgbHXyHDaDcZa1J40AjvEMOsGR3/QcfFx/wgtY4uON5Tb8D1uyOhEaFwZLbmsFbWRAg1ErZp7DOEHaXij0n8/8lH6X+w0RmQ6wjcezN9Or0goI=
