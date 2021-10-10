@@ -42,3 +42,4 @@ jobs:
         bash -c "gpg --import all.gpg && mvn versions:set -DnewVersion=$VERSION-SNAPSHOT && mvn -B -e --settings ../.travis.settings.xml dependency:sources package source:jar javadoc:jar gpg:sign -Darguments='-DskipTests' -DreleaseVersion=$VERSION -DdevelopmentVersion=$VERSION-SNAPSHOT -DconnectionUrl=scm:git:https://github.com/v3nd3774/testing-framework-for-dynamic-graph-program-analysis.git release:clean release:prepare release:perform && mvn versions:set -DnewVersion=$VERSION && mvn --settings ../.travis.settings.xml dependency:sources package source:jar javadoc:jar gpg:sign deploy"
       on:
         all_branches: true
+
