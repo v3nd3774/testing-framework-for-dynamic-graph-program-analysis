@@ -5,7 +5,7 @@
 
   <groupId>io.github.v3nd3774.uta2218.cse6324.s001</groupId>
   <artifactId>graph-testing-framework</artifactId>
-  <version>1.1.6-SNAPSHOT</version>
+  <version>1.1.8</version>
 
   <name>${project.groupId}:${project.artifactId}</name>
   <description>Plugin to enable dynamic testing of programs manipulating Neo4J graphs.</description>
@@ -40,7 +40,7 @@
     <connection>scm:git:https://github.com/v3nd3774/testing-framework-for-dynamic-graph-program-analysis/tree/main</connection>
     <developerConnection>scm:git:https://github.com/v3nd3774/testing-framework-for-dynamic-graph-program-analysis.git</developerConnection>
     <url>https://github.com/v3nd3774/testing-framework-for-dynamic-graph-program-analysis/</url>
-    <tag>graph-testing-framework-1.1.5</tag>
+    <tag>graph-testing-framework-1.1.8</tag>
   </scm>
 
   <properties>
