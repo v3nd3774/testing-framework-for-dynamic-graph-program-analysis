@@ -5,7 +5,7 @@
 
   <groupId>io.github.v3nd3774.uta2218.cse6324.s001</groupId>
   <artifactId>graph-testing-framework</artifactId>
-  <version>1.1.5</version>
+  <version>1.1.6-SNAPSHOT</version>
 
   <name>${project.groupId}:${project.artifactId}</name>
   <description>Plugin to enable dynamic testing of programs manipulating Neo4J graphs.</description>
