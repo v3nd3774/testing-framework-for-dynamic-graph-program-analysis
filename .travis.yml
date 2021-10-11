@@ -39,7 +39,7 @@ jobs:
         echo VERSION=$VERSION;
         bash -c "source ~/.nvm/nvm.sh && nvm install v16.10.0 && npm install @semantic-release/exec && npx semantic-release";
         bash -c "mkdir -p ~/.m2 || echo 'folder exists already...'";
-        bash -c "gpg --import all.gpg && mvn versions:set -DnewVersion=$VERSION-SNAPSHOT && mvn -B -e --settings ../.travis.settings.xml dependency:sources package source:jar javadoc:jar gpg:sign -Darguments='-DskipTests' -DreleaseVersion=$VERSION -DdevelopmentVersion=$VERSION-SNAPSHOT -DconnectionUrl=scm:git:https://github.com/v3nd3774/testing-framework-for-dynamic-graph-program-analysis.git release:prepare release:perform && mvn versions:set -DnewVersion=$VERSION && mvn --settings ../.travis.settings.xml dependency:sources package source:jar javadoc:jar gpg:sign deploy"
+        bash -c "gpg --import all.gpg && mvn versions:set -DnewVersion=$VERSION-SNAPSHOT && mvn -B -e --settings ../.travis.settings.xml dependency:sources package source:jar javadoc:jar gpg:sign -Darguments='-DskipTests' -DreleaseVersion=$VERSION -DdevelopmentVersion=$VERSION-SNAPSHOT -DconnectionUrl=scm:git:https://github.com/v3nd3774/testing-framework-for-dynamic-graph-program-analysis.git release:prepare-with-pom release:perform && mvn versions:set -DnewVersion=$VERSION && mvn --settings ../.travis.settings.xml dependency:sources package source:jar javadoc:jar gpg:sign deploy"
       on:
         all_branches: true
 
