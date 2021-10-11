@@ -40,7 +40,7 @@ jobs:
         echo VERSION=$VERSION;
         bash -c "source ~/.nvm/nvm.sh && nvm install v16.10.0 && npm install @semantic-release/exec && npx semantic-release";
         bash -c "mkdir -p ~/.m2 || echo 'folder exists already...'";
-        bash -c "gpg --import all.gpg && mvn versions:set -DnewVersion=$VERSION-SNAPSHOT && mvn -Darguments='-DskipTests' -DreleaseVersion=$VERSION -DdevelopmentVersion=$VERSION-SNAPSHOT -DconnectionUrl=scm:git:https://github.com/v3nd3774/testing-framework-for-dynamic-graph-program-analysis.git -B -e --settings ../.travis.settings.xml package gpg:sign release:prepare release:perform deploy"
+        bash -c "gpg --import all.gpg && mvn versions:set -DnewVersion=$VERSION-SNAPSHOT && mvn -Darguments='-DskipTests' -DreleaseVersion=$VERSION -DdevelopmentVersion=$VERSION-SNAPSHOT -DconnectionUrl=scm:git:https://github.com/v3nd3774/testing-framework-for-dynamic-graph-program-analysis.git -B -e --settings ../.travis.settings.xml package gpg:sign release:prepare release:perform deploy && mvn versions:set -DnewVersion=$VERSION && mvn -Darguments='-DskipTests' -DreleaseVersion=$VERSION -DdevelopmentVersion=$VERSION-SNAPSHOT -DconnectionUrl=scm:git:https://github.com/v3nd3774/testing-framework-for-dynamic-graph-program-analysis.git -B -e --settings ../.travis.settings.xml package gpg:sign release:prepare release:perform deploy"
       on:
         all_branches: true
 
