@@ -85,7 +85,7 @@
             <releaseProfiles>release</releaseProfiles>
             <goals>deploy</goals>
             <checkModificationExcludes>
-              <checkModificationExclude>plugin/pom.xml</checkModificationExclude>
+              <checkModificationExclude>**/pom.xml</checkModificationExclude>
             </checkModificationExcludes>
           </configuration>
           <dependencies>
