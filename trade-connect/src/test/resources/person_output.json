@@ -1,0 +1,21 @@
+{
+  "name" : "craig",
+  "buys" : [
+    {
+      "count" : 8,
+      "cost" : 524,
+      "ticker" : {
+        "name" : "TSLA"
+      }
+    }
+  ],
+  "sells" : [
+    {
+      "count" : 5,
+      "cost" : 122,
+      "ticker" : {
+        "name" : "AAPL"
+      }
+    }
+  ]
+}

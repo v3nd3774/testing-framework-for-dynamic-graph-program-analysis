@@ -1,0 +1,7 @@
+digraph G {
+  person_name_Greg[];
+  ticker_name_AAPL[];
+  ticker_name_TSLA[];
+  person_name_Greg -> ticker_name_AAPL [ label="TYPE=BUY,COST=148,COUNT=3" ];
+  person_name_Greg -> ticker_name_TSLA [ label="TYPE=SELL,COST=850,COUNT=1" ];
+}
