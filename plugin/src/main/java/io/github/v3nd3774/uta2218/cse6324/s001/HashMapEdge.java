@@ -4,7 +4,7 @@ import org.jgrapht.graph.DefaultEdge;
 import java.util.HashMap;
 
 @SuppressWarnings("serial")
-class HashMapEdge extends DefaultEdge {
+public class HashMapEdge extends DefaultEdge {
   private HashMap<String, String> label;
   public HashMapEdge(HashMap<String, String> label) {
     this.label = label;
@@ -23,5 +23,12 @@ class HashMapEdge extends DefaultEdge {
   @Override
   public int hashCode() {
     return this.label.hashCode();
+  }
+
+  public HashMap<String, String> getSource(){
+    return (HashMap<String, String>) super.getSource();
+  }
+  public HashMap<String, String> getTarget(){
+    return (HashMap<String, String>) super.getTarget();
   }
 }
