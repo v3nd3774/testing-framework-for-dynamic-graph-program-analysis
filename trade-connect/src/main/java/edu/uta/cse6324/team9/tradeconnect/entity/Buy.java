@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(exclude = {"id"})
 @NoArgsConstructor
 @Getter @Setter
+// The buy entity, has attributes count, cost, tricker
 public class Buy {
     @Id @GeneratedValue private Long id;
     private int count;
