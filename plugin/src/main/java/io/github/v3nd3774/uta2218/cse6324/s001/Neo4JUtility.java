@@ -25,7 +25,6 @@ public class Neo4JUtility implements AutoCloseable
 {
     private final Driver driver;
     public final String emptyResultString = "NORESULTS";
-
     public Neo4JUtility( String uri, String user, String password )
     {
         driver = GraphDatabase.driver( uri, AuthTokens.basic( user, password ) );
@@ -90,8 +89,11 @@ public class Neo4JUtility implements AutoCloseable
         return out;
     }
 
-    public Graph<HashMap<String, String>, HashMapEdge> readState() {
+    public void conformGraph(Graph<HashMap<String, String>, HashMapEdge> target) {
+      System.out.println("do stuff");
+    }
 
+    public Graph<HashMap<String, String>, HashMapEdge> readState() {
         List<Map<String, Object>> r = this.runQueryResult("match (n)-[r]->(m) return n, r, m");
         
         // modified from https://neo4j.com/docs/java-reference/current/java-embedded/cypher-java/
@@ -131,8 +133,6 @@ public class Neo4JUtility implements AutoCloseable
           out.addVertex((HashMap<String, String>)destMap);
           out.addEdge((HashMap<String, String>)srcMap, (HashMap<String, String>)destMap, edge);
         };
-
-
         return out;
     }
 }

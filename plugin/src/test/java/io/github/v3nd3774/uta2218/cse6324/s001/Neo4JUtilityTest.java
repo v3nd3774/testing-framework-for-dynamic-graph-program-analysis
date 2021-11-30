@@ -52,4 +52,24 @@ public class Neo4JUtilityTest extends TestCase {
       List<Map<String, Object>> r = util.runQueryResult("CREATE p = (andy:Person {name:'Andy'})-[:WORKS_AT]->(neo:Company)<-[:WORKS_AT]-(michael:Person {name: 'Michael'}) RETURN p");
       assertTrue(!GraphUtility.equals(DotLanguageFile.createEmptyGraph(), util.readState()));
    }
+
+   // read nonempty state
+   public void testConform() throws Exception {
+      // Delete all data in graph
+      util.runQuery("match (n)-[r]->(m) delete n, r, m");
+      Graph<HashMap<String, String>, HashMapEdge> startingGraph = util.readState();
+
+      //Setup target graph in-memory
+      Graph<HashMap<String, String>, HashMapEdge> targetGraph = DotLanguageFile.createEmptyGraph();
+      //Conform
+      util.conformGraph(targetGraph);
+
+      // re-read state
+      Graph<HashMap<String, String>, HashMapEdge> terminatingGraph = util.readState();
+
+      //check state is different than it started
+      assertTrue(!GraphUtility.equals(startingGraph, terminatingGraph));
+      //check state is same as target
+      assertTrue(GraphUtility.equals(targetGraph, terminatingGraph));
+   }
 }
