@@ -19,7 +19,7 @@ before_script:
 - ls -alh
 - source .VERSION
 script:
-- mvn -Dtest=\!Neo4JUtilityTest,Neo4JUtility1Test,Neo4JUtility2Test,Neo4JUtility3Test test # disables neo4j tests in ci because we don't have docker there
+- mvn -Dtest=\!Neo4JUtility\* test # disables neo4j tests in ci because we don't have docker there
 jobs:
   include:
   - if: branch != main
