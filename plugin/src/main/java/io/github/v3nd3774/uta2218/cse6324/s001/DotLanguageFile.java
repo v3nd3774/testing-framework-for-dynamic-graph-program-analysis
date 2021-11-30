@@ -162,7 +162,7 @@ public class DotLanguageFile {
     public String read() {
       if(!this.readB){
         try {
-          this.content = Files.readString(this.input.toPath(), StandardCharsets.US_ASCII);
+          this.content = Files.readString(this.input.toPath(), StandardCharsets.UTF_8);
         } catch (Exception e) {
           this.content = e.toString();
         } finally {

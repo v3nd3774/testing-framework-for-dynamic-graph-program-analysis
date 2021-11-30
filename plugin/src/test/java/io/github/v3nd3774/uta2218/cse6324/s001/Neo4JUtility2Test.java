@@ -13,7 +13,8 @@ import java.util.Map;
 import org.neo4j.driver.Result;
 import org.neo4j.driver.summary.ResultSummary;
 
-public class Neo4JUtilityTest extends TestCase {
+@NotThreadSafe
+public class Neo4JUtility2Test extends TestCase {
    // assumes an empty test instance
    // assuming test instance xists wit hthis settings
    protected String localTestConnectString = "bolt://localhost:7687";
@@ -29,18 +30,9 @@ public class Neo4JUtilityTest extends TestCase {
       badConnectionUtil = new Neo4JUtility(localTestConnectString, localTestConnectUser, localTestConnectPasswordWrong);
    }
 
-   // test connection
-   public void testOKConnect() throws Exception {
-      assertTrue(util.isConnected());
-   }
-
-   // test bad connection
-   public void testBadConnect() throws Exception {
-      assertTrue(!badConnectionUtil.isConnected());
-   }
-
-   // test ability to run arbitrary query
-   public void testRunQuery() throws Exception {
-      assertTrue(!util.runQuery("RETURN 1").equals(util.emptyResultString));
+   // read nonempty state
+   public void testReadNonEmptyState() throws Exception {
+      List<Map<String, Object>> r = util.runQueryResult("CREATE p = (andy:Person {name:'Andy'})-[:WORKS_AT]->(neo:Company)<-[:WORKS_AT]-(michael:Person {name: 'Michael'}) RETURN p");
+      assertTrue(!GraphUtility.equals(DotLanguageFile.createEmptyGraph(), util.readState()));
    }
 }

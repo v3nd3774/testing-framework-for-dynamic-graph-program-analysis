@@ -53,6 +53,12 @@
   <dependencies>
     <!-- https://neo4j.com/developer/java/ -->
     <dependency>
+      <groupId>com.github.stephenc.jcip</groupId>
+      <artifactId>jcip-annotations</artifactId>
+      <version>1.0-1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.neo4j.driver</groupId>
       <artifactId>neo4j-java-driver</artifactId>
       <version>4.3.5</version>
