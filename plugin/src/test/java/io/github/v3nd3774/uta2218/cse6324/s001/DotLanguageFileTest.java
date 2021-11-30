@@ -90,7 +90,8 @@ public class DotLanguageFileTest extends TestCase {
 
    // test we can successfully read in dotfile content
    public void testRead() throws Exception {
-     String expectedEmpty = "digraph G {}\n";
+     String expectedEmpty = "digraph G {}\n"; // for mac
+     // String expectedEmpty = "digraph G {\r\n}\r\n"; // for windows
      DotLanguageFile file = new DotLanguageFile(emptyPath);
      assertEquals(expectedEmpty, file.read());
    }
