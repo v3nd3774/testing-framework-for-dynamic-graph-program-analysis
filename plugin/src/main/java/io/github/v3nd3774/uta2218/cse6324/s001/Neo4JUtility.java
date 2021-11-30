@@ -6,9 +6,14 @@ import org.neo4j.driver.Driver;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.List;
+import java.util.Set;
+import java.util.Map.Entry;
+
 import org.neo4j.driver.GraphDatabase;
 import org.neo4j.driver.Result;
 import org.neo4j.driver.Record;
@@ -89,8 +94,160 @@ public class Neo4JUtility implements AutoCloseable
         return out;
     }
 
+    public String objToString(HashMap<String, String> eSource, String start, String end){
+      String sourceNode = start;
+      Integer limit = eSource.keySet().size();
+      if (eSource.containsKey("TYPE")){
+        sourceNode = sourceNode + ":" + eSource.get("TYPE");
+        limit = limit - 1;
+      }
+      sourceNode = sourceNode + " ";
+      if (eSource.keySet().size() > 1){
+        Integer counter = 0;
+        sourceNode = sourceNode + "{";
+        for (Entry entryPair : eSource.entrySet()) {
+          String k = (String)entryPair.getKey();
+          if(!k.equals("TYPE")){
+            String v = (String)entryPair.getValue();
+            counter = counter + 1;
+            sourceNode = sourceNode + " " + k + ": " + "'" + v + "'" ;
+            if(counter < limit){
+              //trailing comma
+              sourceNode = sourceNode + ", ";
+            }
+          }
+        }
+        sourceNode = sourceNode + "}";
+      }
+      sourceNode = sourceNode + end;
+      return sourceNode;
+    }
+
+    public String nodeToString(HashMap<String, String> eSource, String type){
+      String start = "(" + type;
+      return objToString(eSource, start, ")");
+    }
+    public String srcNodeToString(HashMap<String, String> eSource){
+      return nodeToString(eSource, "source");
+    }
+    public String tarNodeToString(HashMap<String, String> eSource){
+      return nodeToString(eSource, "target");
+    }
+
+    public String edgeToString(HashMap<String, String> eSource){
+      return objToString(eSource, "[edge", "]");
+    }
+
     public void conformGraph(Graph<HashMap<String, String>, HashMapEdge> target) {
-      System.out.println("do stuff");
+      Set<HashMap<String, String>> targetVertices = target.vertexSet();
+      Set<HashMapEdge> targetEdges = target.edgeSet();
+
+      Graph<HashMap<String, String>, HashMapEdge> current = this.readState();
+      Set<HashMap<String, String>> currentVertices = current.vertexSet();
+      Set<HashMapEdge> currentEdges = current.edgeSet();
+
+      Set<HashMap<String, String>> desiredNodes = new HashSet<HashMap<String, String>>();
+      Set<HashMap<String, String>> undesirableNodes = new HashSet<HashMap<String, String>>();
+      Set<HashMap<String, String>> nodesToBeCreated = new HashSet<HashMap<String, String>>();
+
+      for(HashMap<String, String> vertex: currentVertices) {
+        Boolean isDesired = false;
+        for(HashMap<String, String> targetVertex: targetVertices) {
+          if(targetVertex.equals(vertex)){
+            isDesired = true;
+          }
+        }
+        if(isDesired){
+          desiredNodes.add(vertex);
+        } else {
+          undesirableNodes.add(vertex);
+        }
+      }
+      for(HashMap<String, String> targetVertex: targetVertices) {
+        Boolean isPresent = false;
+        for(HashMap<String, String> vertex: desiredNodes) {
+          if(vertex.equals(targetVertex)){
+            isPresent = true;
+          }
+        }
+        if(!isPresent){
+          nodesToBeCreated.add(targetVertex);
+        }
+      }
+
+      Set<HashMapEdge> desiredEdges = new HashSet<HashMapEdge>();
+      Set<HashMapEdge> undesirableEdges = new HashSet<HashMapEdge>();
+      Set<HashMapEdge> edgesToBeCreated = new HashSet<HashMapEdge>();
+
+      for(HashMapEdge edge : currentEdges) {
+        HashMap<String, String> currentLabel = edge.getLabel();
+        Boolean isDesired = false;
+
+        for(HashMapEdge targetEdge: targetEdges) {
+          HashMap<String, String> targetLabel = targetEdge.getLabel();
+          if(currentLabel.equals(targetLabel)){
+            isDesired = true;
+          }
+        }
+        if(isDesired){
+          desiredEdges.add(edge);
+        } else {
+          undesirableEdges.add(edge);
+        }
+      }
+
+      for(HashMapEdge targetEdge : targetEdges) {
+        HashMap<String, String> targetLabel = targetEdge.getLabel();
+        Boolean isPresent = false;
+
+        for(HashMapEdge edge: desiredEdges) {
+          HashMap<String, String> edgeLabel = edge.getLabel();
+          if(edgeLabel.equals(targetLabel)){
+            isPresent = true;
+          }
+        }
+        if(!isPresent){
+          edgesToBeCreated.add(targetEdge);
+        }
+      }
+
+      // Delete unwanted edges first
+      for (HashMapEdge edge : undesirableEdges) {
+        HashMap<String, String> edgeLabel = edge.getLabel();
+        String edgeString = this.edgeToString(edgeLabel);
+        HashMap<String, String> eSource = edge.getSource();
+        String sourceNode = this.srcNodeToString(eSource);
+        HashMap<String, String> eTarget = edge.getTarget();
+        String targetNode = this.tarNodeToString(eTarget);
+        String query = "match " + sourceNode + "-" + edgeString + "-" + targetNode + " with edge, properties(edge) as m detach delete edge return m";
+        this.runQuery(query);
+      }
+
+      // Delete unwanted nodes next
+      for (HashMap<String, String> node : undesirableNodes) {
+        String sourceNode = this.srcNodeToString(node);
+        String query = "match " + sourceNode + " with source, properties(source) as m detach delete source return m";
+        this.runQuery(query);
+      }
+
+      // Add desired nodes
+      for (HashMap<String, String> node : nodesToBeCreated) {
+        String sourceNode = this.srcNodeToString(node);
+        String query = "merge " + sourceNode + " return source";
+        this.runQuery(query);
+      }
+
+      // Add desired edges
+      for (HashMapEdge edge : edgesToBeCreated) {
+        HashMap<String, String> edgeLabel = edge.getLabel();
+        String edgeString = this.edgeToString(edgeLabel);
+        HashMap<String, String> eSource = edge.getSource();
+        String sourceNode = this.srcNodeToString(eSource);
+        HashMap<String, String> eTarget = edge.getTarget();
+        String targetNode = this.tarNodeToString(eTarget);
+        String query = "match " + sourceNode + ", " + targetNode + " merge (source)-" + edgeString + "-(target) return source, edge, target";
+        this.runQuery(query);
+      }
     }
 
     public Graph<HashMap<String, String>, HashMapEdge> readState() {
@@ -116,6 +273,12 @@ public class Neo4JUtility implements AutoCloseable
           Relationship rel = (Relationship)entry.get("r");
           String relType = rel.type();
           HashMap<String, String> relMap = new HashMap<String, String>();
+          Map<String, Object> relData = rel.asMap();
+          for(Map.Entry<String, Object> e : relData.entrySet()) {
+            String key = e.getKey();
+            String value = (String)e.getValue();
+            relMap.put(key, value);
+          }
           relMap.put("TYPE", relType);
           HashMapEdge edge = new HashMapEdge(relMap);
 
